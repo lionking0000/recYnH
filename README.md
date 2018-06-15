@@ -68,12 +68,30 @@ Alignment
 ------------
 
 Here is the example of how to do alignment (mapping) FASTQ files into reference sequences (FASTA).
- 
+
+Example 1
+~~~~
 python recYnH.py align -i1 ./example/db/A463-MGj69.RBP-MAP.-150.fa -f1 ./example/fastq/S1_WD_R1.300000.fastq.gz -f2 ./example/fastq/S1_WD_R2.300000.fastq.gz -o ./example/output/exp1 -n S1_WD
-
+~~~~
+~~~~
 python recYnH.py align -i1 ./example/db/A463-MGj69.RBP-MAP.-150.fa -f1 ./example/fastq/S2_QD_R1.300000.fastq.gz -f2 ./example/fastq/S2_QD_R2.300000.fastq.gz -o ./example/output/exp1 -n S2_QD
+~~~~
+
+Example 2
+~~~~
+python recYnH.py align -i1 ./example/db/roth2016_control_set_plus_control.-150.fa -f1 ./example/fastq/EXP1_W_R1.fastq -f2 ./example/fastq/EXP1_W_R2.fastq -o ./example/output/ -n EXP1_W
+~~~~
+
+~~~~
+python recYnH.py align -i1 ./example/db/roth2016_control_set_plus_control.-150.fa -f1 ./example/fastq/EXP1_Q_R1.fastq -f2 ./example/fastq/EXP1_Q_R2.fastq -o ./example/output/ -n EXP1_Q
+~~~~
 
 
-Alignment
+Merge two matrix files to generate Interaction Score matrix
 ------------
 
+~~~~
+python recYnH.py merge -m1 ./example/output/EXP1_W -m2 ./example/output/EXP1_Q -o ./example/output/ -n EXP1
+~~~~
+
+zcat ../../../2017-11-03_MiSeq/S1_W_R1.fastq.gz  | head -n 400000 > EXP1_W_R1.fastq
