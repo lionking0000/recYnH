@@ -67,6 +67,13 @@ RUN Rscript -e "install.packages(c('d3heatmap','matrixStats'))"
 Alignment
 ------------
 
-python recYnH.py align -i1 ./example/db/A463-MGj69.RBP-MAP.-150.fa -f1 ./example/fastq/S1_WD_R1.300000.fastq.gz -f2 ./example/fastq/S1_WD_R2.300000.fastq.gz -o ./share/output/exp1 -n S1_WD
+Here is the example of how to do alignment (mapping) FASTQ files into reference sequences (FASTA).
+ 
+python recYnH.py align -i1 ./example/db/A463-MGj69.RBP-MAP.-150.fa -f1 ./example/fastq/S1_WD_R1.300000.fastq.gz -f2 ./example/fastq/S1_WD_R2.300000.fastq.gz -o ./example/output/exp1 -n S1_WD
 
-python recYnH.py align -i1 ./example/db/A463-MGj69.RBP-MAP.-150.fa -f1 ./example/fastq/S2_QD_R1.300000.fastq.gz -f2 ./example/fastq/S2_QD_R2.300000.fastq.gz -o ./share/output/exp1 -n S2_QD
+python recYnH.py align -i1 ./example/db/A463-MGj69.RBP-MAP.-150.fa -f1 ./example/fastq/S2_QD_R1.300000.fastq.gz -f2 ./example/fastq/S2_QD_R2.300000.fastq.gz -o ./example/output/exp1 -n S2_QD
+
+
+Alignment
+------------
+
