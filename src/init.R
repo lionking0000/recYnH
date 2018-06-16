@@ -11,15 +11,15 @@
 
 library("RColorBrewer")
 library(pheatmap)
-require(gtools)
+###require(gtools)
 #require(gplots)
-require(reshape2)
+###require(reshape2)
 #library(psych)
 #library(clipr)
 #library(swfscMisc)               # for uniform.test    
 #library(PerformanceAnalytics)
 library(mixtools)
-library(pROC)    
+#library(pROC)    
 #library(d3heatmap)
 #library(outliers)
 #library(readxl)  

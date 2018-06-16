@@ -6,6 +6,7 @@ sys.path.append( "." )
 
 import argparse
 from src import align
+from src import score
 from src import merge
 
 EPILOG = "Commands:\n\
@@ -30,19 +31,27 @@ if __name__ == "__main__":
     align_parser.add_argument('-o', '--output', required=False, help="set the output directory path (default = same folder as FASTQ file 1)" ) # Y2H or Y3H
     align_parser.add_argument('-n', '--name', default='recYnH.raw', required=False, help="set the output filename (default 'recYnH.raw')" ) # Y2H or Y3H
     
+    score_parser = subparsers.add_parser('score', help='a help for score') #, epilog = "Run 'recYnH.py merge --help' for more information on a command.")
+    score_parser.add_argument('-p', '--program', default='Y2H', help="set the experiments type ('Y2H'|'Y3H') (default 'Y2H')" ) # Y2H or Y3H
+    score_parser.add_argument('-m1', '--matrix1', required=True, help="set the interaction matrix of non-selection condition" ) # Y2H or Y3H
+    score_parser.add_argument('-m2', '--matrix2', required=True, help="set the interaction matrix of selection condition" ) # Y2H or Y3H
+    score_parser.add_argument('-o', '--output', required=False, help="set the output folder name (default = same folder as interaction matrix file 1)" ) # Y2H or Y3H
+    score_parser.add_argument('-n', '--name', default='recYnH.IS', required=False, help="set the output filename (default 'recYnH.IS')" ) # Y2H or Y3H   
+    
     merge_parser = subparsers.add_parser('merge', help='a help for merge') #, epilog = "Run 'recYnH.py merge --help' for more information on a command.")
     merge_parser.add_argument('-p', '--program', default='Y2H', help="set the experiments type ('Y2H'|'Y3H') (default 'Y2H')" ) # Y2H or Y3H
     merge_parser.add_argument('-m1', '--matrix1', required=True, help="set the interaction matrix of non-selection condition" ) # Y2H or Y3H
     merge_parser.add_argument('-m2', '--matrix2', required=True, help="set the interaction matrix of selection condition" ) # Y2H or Y3H
     merge_parser.add_argument('-o', '--output', required=False, help="set the output folder name (default = same folder as interaction matrix file 1)" ) # Y2H or Y3H
     merge_parser.add_argument('-n', '--name', default='recYnH.IS', required=False, help="set the output filename (default 'recYnH.IS')" ) # Y2H or Y3H   
-    
     args = parser.parse_args()
 
     print args.cmd
 
     if ( args.cmd == "align" ):
         align.run( args )
+    elif ( args.cmd == "score" ):
+        score.run( args )
     elif ( args.cmd == "merge" ):
         merge.run( args )
     else:
