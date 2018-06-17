@@ -37,16 +37,10 @@ rec-YnH requires the following software:
  * blast+ 2.6.0 or higher, http://ftp.ncbi.nlm.nih.gov/blast/executables/blast+
  
  * R 3.1 or higher, with the following packages installed (see Installation Section):
-   * optparse
    * RColorBrewer
-   * reshape2
-   * ggplot2 >= v2.0
-   * MASS
-   * devtools
-   * [psiplot](https://github.com/kcha/psiplot)
- 
- * bowtie 1.0.0 (Langmead et al., 2009), http://bowtie-bio.sourceforge.net/index.shtml
- 
+   * pheatmap
+   * mixtools
+
 Installation
 ------------
 
@@ -56,13 +50,7 @@ Installation
 
 R packages
 
-RUN Rscript -e "install.packages(c('pheatmap','RColorBrewer'))"
-RUN Rscript -e "install.packages(c('gtools','reshape2'))"
-RUN Rscript -e "install.packages(c('psych','clipr'))"
-RUN Rscript -e "install.packages(c('swfscMisc','PerformanceAnalytics'))"
-RUN Rscript -e "install.packages(c('mixtools','pROC'))"
-RUN Rscript -e "install.packages(c('outliers','readxl'))"
-RUN Rscript -e "install.packages(c('d3heatmap','matrixStats'))"
+RUN Rscript -e "install.packages(c('pheatmap','RColorBrewer','mixtools'))"
 
 Alignment
 ------------
