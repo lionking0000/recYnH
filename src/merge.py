@@ -1,4 +1,5 @@
 import os
+import sys
 VERBOSE = False
 
 def run_cmd( cmd ):
@@ -6,14 +7,26 @@ def run_cmd( cmd ):
     os.system( cmd )
 
 def run( args ):
-    #print args.program # the experiments type ('Y2H'|'Y3H')
+    print args.input # the experiments type ('Y2H'|'Y3H')
     #print args.matrix1 # the interaction matrix of selection condition
     #print args.matrix2 # the interaction matrix of non-selection condition
-    #print args.output # the output folder name
-    #print args.name # output name
+    print args.output # the output folder name
+    print args.name # output name
+    
+    # file check
+    is_files = []
+    for filepath in args.input:
+        if os.path.exists( filepath ) == False:
+            print "File doesn't exist: %s" % filepath
+            sys.exit( 0 )
+        else:
+            is_files.append( filepath )
+ 
+    if len( is_files ) == 0:
+        print "File doesn't exist"
+        sys.exit( 0 )
 
-    if args.matrix2 == None:
-        args.matrix2 = args.matrix1
+    assert( False )
     
     [ dirname1, m1 ] = os.path.split( args.matrix1 )
     [ dirname2, m2 ] = os.path.split( args.matrix2 )
@@ -31,5 +44,5 @@ def run( args ):
 
         
     #cmd = "Rscript /usr/local/bin/visualization.R %s %s %s %s %s" % ( args.program, args.matrix1, args.matrix2, args.output, args.name )
-    cmd = "Rscript ./src/visualization.R %s %s %s %s %s" % ( args.program, args.matrix1, args.matrix2, args.output, args.name )
-    run_cmd( cmd )
+    #cmd = "Rscript ./src/visualization.R %s %s %s %s %s" % ( args.program, args.matrix1, args.matrix2, args.output, args.name )
+    #run_cmd( cmd )
