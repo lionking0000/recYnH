@@ -34,6 +34,7 @@ We assumed that the sequencing format is the same as we described in [Nature Com
 usage: recYnH.py [-h] COMMAND ...
 ~~~~
 
+~~~~
 recYnH program
 
 positional arguments:
@@ -51,6 +52,7 @@ Commands:
   merge      Merge several interaction score matries and apply quartile correction to generate a final average interaction score matrix
 
 Run 'recYnH.py COMMAND --help' for more information on a command.
+~~~~
 
 Requirements
 ------------
