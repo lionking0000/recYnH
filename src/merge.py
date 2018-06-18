@@ -70,7 +70,7 @@ def run( args ):
         print "File doesn't exist"
         sys.exit( 0 )
 
-    no_correct_m, final_m, rownames, colnames = merge_and_correct( file_list )
+    no_correct_m, final_m, rownames, colnames = merge_and_correct( file_list, float(args.quartile) * 100 )
 
     [ dirname1, m1 ] = os.path.split( file_list[0] )
 

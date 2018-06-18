@@ -29,24 +29,40 @@ def FastqToFasta( fastq, fasta ):
     fout.close()
     f.close()
 
-def CheckBlastnDB( fasta_file ):
+def GenerateLastNts( fasta_file, length = 150 ):
+    output_file = fasta_file
+    output_file += ".-%d" % length
+    fa = fasta.read_fasta( fasta_file )
+
+    lastXnt_dic = {}
+
+    fout = open( output_file, "w" )
+    for id in fa:
+        lastXnt = fa[id][-length:].upper()
+        print >> fout, ">%s\n%s" % ( id, lastXnt ) #, lastXnt in lastXnt_dic
+        lastXnt_dic[ lastXnt ] = id
+    fout.close()
+
+    return output_file
+
+def CheckBlastnDB( fasta_file, lastnt_length ):
     bChecked = True
-    if os.path.exists( fasta_file + ".nhr" ):
+    if os.path.exists( fasta_file + ".-%d.nhr" % lastnt_length ) == False:
         bChecked = False
-    if os.path.exists( fasta_file + ".nin" ):
+    if os.path.exists( fasta_file + ".-%d.nin" % lastnt_length ) == False:
         bChecked = False
-    if os.path.exists( fasta_file + ".nsq" ):
+    if os.path.exists( fasta_file + ".-%d.nsq" % lastnt_length ) == False:
         bChecked = False
 
     return bChecked
 
-def MakeBlastnDB( fasta_file ):
-    command = "makeblastdb -in %s -dbtype nucl" % fasta_file
+def MakeBlastnDB( fasta_file, lastnt_length ):
+    command = "makeblastdb -in %s.-%d -dbtype nucl" % ( fasta_file, lastnt_length )
     run_cmd( command )
 
 
-def BLASTN_NEW( fasta_file, filepath1, filepath2, output_file ):
-    print ( fasta_file, filepath1, filepath2, output_file )
+def BLASTN_NEW( fasta_file, lastnt_length, filepath1, filepath2, output_file ):
+    #print ( fasta_file, filepath1, filepath2, output_file )
     '''
         parse blastn output and make ppi
     '''
@@ -67,7 +83,7 @@ def BLASTN_NEW( fasta_file, filepath1, filepath2, output_file ):
     #fa = fasta.read_fasta_file( sys.argv[2] )
     #filepath1 = sys.argv[3]
     #filepath2 = sys.argv[4]
-    fa = fasta.read_fasta_file( fasta_file )
+    fa = fasta.read_fasta_file( "%s.-%d" % ( fasta_file, lastnt_length ) )
     #filepath1 = sys.argv[3]
     #filepath2 = sys.argv[4]
 
@@ -142,7 +158,7 @@ def BLASTN_NEW( fasta_file, filepath1, filepath2, output_file ):
     fout1.close()
     fout2.close()
 
-def align_subprocess( original_fasta, fasta_file, fastq_file  ):
+def align_subprocess( original_fasta, lastnt_length, fasta_file, fastq_file  ):
     # convert fastq to fasta ( Temporarily now using fastq file generated in Friedrich folder; since it is the same fastq. But We need to change it to Blastn for general cases )
     #cmd = "python main.py fastq_to_fasta %s > %s" % ( fastq, fasta )
     #cmd = "main.py fastq_to_fasta %s > %s" % ( fastq, fasta )
@@ -150,14 +166,17 @@ def align_subprocess( original_fasta, fasta_file, fastq_file  ):
     FastqToFasta( fastq_file, fasta_file )
     
     # blastn-short search                                                                         (20) 
-    cmd = "blastn -num_threads %d -db %s  -query %s -task blastn-short -outfmt 6 -max_target_seqs 5 -evalue 1e-8 > %s.blastn" % ( NUM_THREADS, original_fasta, fasta_file, fasta_file )
+    cmd = "blastn -num_threads %d -db %s.-%d  -query %s -task blastn-short -outfmt 6 -max_target_seqs 5 -evalue 1e-8 > %s.blastn" % ( NUM_THREADS, original_fasta, lastnt_length, fasta_file, fasta_file )
     run_cmd( cmd )
    
+
 
 def run( args ):
     #print args.program
     #print args.fasta1
+    #print args.lastnt1
     #print args.fasta2
+    #print args.lastnt2
     #print args.fastq1
     #print args.fastq2
     #print args.output   
@@ -165,11 +184,19 @@ def run( args ):
     if args.fasta2 == None:
         args.fasta2 = args.fasta1
 
+    try:
+        args.lastnt1 = int( args.lastnt1 )
+        args.lastnt2 = int( args.lastnt2 )
+    except:
+        exit(0)
+
     # Blastn check
-    if CheckBlastnDB( args.fasta1 ) == False:
-        MakeBlastnDB( args.fasta1 )
-    if CheckBlastnDB( args.fasta2 ) == False:
-        MakeBlastnDB( args.fasta2 )
+    if CheckBlastnDB( args.fasta1, args.lastnt1 ) == False:
+        GenerateLastNts( args.fasta1, args.lastnt1 )
+        MakeBlastnDB( args.fasta1, args.lastnt1 )
+    if CheckBlastnDB( args.fasta2, args.lastnt2 ) == False:
+        GenerateLastNts( args.fasta2, args.lastnt2 )
+        MakeBlastnDB( args.fasta2, args.lastnt2 )
 
     [ dirname1, fq1 ] = os.path.split( args.fastq1 )
     [ dirname2, fq2 ] = os.path.split( args.fastq2 )
@@ -228,10 +255,10 @@ def run( args ):
     '''
 
     # multi-threading
-    th1 = threading.Thread(target=align_subprocess, args = ( args.fasta1, fa1, fq1 ) )
+    th1 = threading.Thread(target=align_subprocess, args = ( args.fasta1, args.lastnt1, fa1, fq1 ) )
     th1.start()
 
-    th2 = threading.Thread(target=align_subprocess, args = ( args.fasta2, fa2, fq2 ) )
+    th2 = threading.Thread(target=align_subprocess, args = ( args.fasta2, args.lastnt2, fa2, fq2 ) )
     th2.start()
 
     th1.join()
@@ -242,10 +269,10 @@ def run( args ):
     # maybe ignoring orientation could be added in the future
     if args.relaxed == True:
         # no restriction for aligned position
-        cmd = "main.py BLASTN_RELAXED %s %s.blastn %s.blastn > %s/%s" % ( args.fasta1, fa1, fa2, args.output, args.name )
+        cmd = "main.py BLASTN_RELAXED %s.-%d %s.blastn %s.blastn > %s/%s" % ( args.fasta1, args.lastnt1, fa1, fa2, args.output, args.name )
         run_cmd( cmd )  
     else:
         # very stringent case
         #cmd = "main.py BLASTN_NEW %s %s.blastn %s.blastn > %s/%s" % ( args.fasta1, fa1, fa2, args.output, args.name )
         #run_cmd( cmd )
-        BLASTN_NEW( args.fasta1, "%s.blastn" % fa1, "%s.blastn" % fa2, "%s/%s" % ( args.output, args.name ) )
+        BLASTN_NEW( args.fasta1, args.lastnt1, "%s.blastn" % fa1, "%s.blastn" % fa2, "%s/%s" % ( args.output, args.name ) )

@@ -27,6 +27,8 @@ if __name__ == "__main__":
     align_parser.add_argument('-r', '--relaxed', action='store_true', help="set relaxed alignment mode" ) # Y2H or Y3H
     align_parser.add_argument('-i1', '--fasta1', required=True, help="set the sequence of baits and preys; if i2 is set then it is for baits" ) # Y2H or Y3H
     align_parser.add_argument('-i2', '--fasta2', required=False, help="set the sequence of baits (OPTIONAL)" ) # Y2H or Y3H
+    align_parser.add_argument('-l1', '--lastnt1', default=150, type=int, required=False, help="set the sequence of length of baits (default 150nt)" ) # Y2H or Y3H
+    align_parser.add_argument('-l2', '--lastnt2', default=150, type=int, required=False, help="set the sequence of length of preys (default 150nt)" ) # Y2H or Y3H
     align_parser.add_argument('-f1', '--fastq1', required=True, help="set the FASTQ file (read 1 = baits)" ) # Y2H or Y3H
     align_parser.add_argument('-f2', '--fastq2', required=True, help="set the FASTQ file (read 2 = preys)" ) # Y2H or Y3H
     align_parser.add_argument('-o', '--output', required=False, help="set the output directory path (default = same folder as FASTQ file 1)" ) # Y2H or Y3H
@@ -41,6 +43,7 @@ if __name__ == "__main__":
     
     merge_parser = subparsers.add_parser('merge', help='a help for merge') #, epilog = "Run 'recYnH.py merge --help' for more information on a command.")
     merge_parser.add_argument('-i', '--input', required = True, nargs = '*', help="list of interaction score matrices" ) # Y2H or Y3H
+    merge_parser.add_argument('-q', '--quartile', default=0.75, required=False, help="set the quartile normailzation cut-off (default 0.75)" ) # Y2H or Y3H
     merge_parser.add_argument('-o', '--output', required=False, help="set the output folder name (default = same folder as interaction matrix file 1)" ) # Y2H or Y3H
     merge_parser.add_argument('-n', '--name', default='recYnH.avgIS', required=False, help="set the output filename (default 'recYnH.avgIS')" ) # Y2H or Y3H   
     args = parser.parse_args()
