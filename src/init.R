@@ -11,19 +11,8 @@
 
 library("RColorBrewer")
 library(pheatmap)
-###require(gtools)
-#require(gplots)
-###require(reshape2)
-#library(psych)
-#library(clipr)
-#library(swfscMisc)               # for uniform.test    
-#library(PerformanceAnalytics)
 library(mixtools)
-#library(pROC)    
-#library(d3heatmap)
-#library(outliers)
-#library(readxl)  
-#library(matrixStats)
+
 
 #=====================================================================================================================================  
 # Reference Informations                                                                                                 
@@ -1415,15 +1404,11 @@ NormalMixture <-function(data, return.output = FALSE){
 # Remove 0 values, and gaussian mixture to find signal
 NormalMixture2 <-function(data, show.plot = FALSE, threshold = 0.5, non_zero_cut = 0){        
 	set.seed(47)   
-	# data = refine_bm1_Q
-	# se1_W             
+       
 	output2 = data
 	non_zero_data = data[which(data>non_zero_cut)]
-	#output = normalmixEM(log2(as.vector(non_zero_data)))  
 	output = normalmixEM(as.vector(non_zero_data))
-	#output$x = log2(output$x)
-	#print( output$mu )
-	#print( output$sigma )
+
 	if (show.plot){
 		plot(output,which=2)
 	}
@@ -1434,18 +1419,6 @@ NormalMixture2 <-function(data, show.plot = FALSE, threshold = 0.5, non_zero_cut
 		non_zero_data[output$posterior[,1]< threshold] = 0
 		output2[which(data>0)] = non_zero_data
     } 
-    
-	#plot(output,which=2)  
-	#print(output)    
-	#plot(log10(as.vector(non_zero_data)),output$posterior[,1])
-	#plot(log10(as.vector(non_zero_data)),output$posterior[,2])	    
-	
-	#if ( output$mu[2] > output$mu[1] ){
-	#	non_zero_data[output$posterior[,2] < 0.9] = 0
-	#}else{
-	#	non_zero_data[output$posterior[,1] < 0.9] = 0
-	#}
-	
 	return ( output2 )    
 }    
 
