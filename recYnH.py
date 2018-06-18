@@ -43,7 +43,7 @@ if __name__ == "__main__":
     
     merge_parser = subparsers.add_parser('merge', help='a help for merge') #, epilog = "Run 'recYnH.py merge --help' for more information on a command.")
     merge_parser.add_argument('-i', '--input', required = True, nargs = '*', help="list of interaction score matrices" ) # Y2H or Y3H
-    merge_parser.add_argument('-q', '--quartile', default=0.75, required=False, help="set the quartile normailzation cut-off (default 0.75)" ) # Y2H or Y3H
+    merge_parser.add_argument('-q', '--quartile', default=0.75, required=False, help="set the percentile auto-activation signal correction value (default 0.75)" ) # Y2H or Y3H
     merge_parser.add_argument('-o', '--output', required=False, help="set the output folder name (default = same folder as interaction matrix file 1)" ) # Y2H or Y3H
     merge_parser.add_argument('-n', '--name', default='recYnH.avgIS', required=False, help="set the output filename (default 'recYnH.avgIS')" ) # Y2H or Y3H   
     args = parser.parse_args()
