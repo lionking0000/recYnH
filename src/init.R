@@ -1422,8 +1422,8 @@ NormalMixture2 <-function(data, show.plot = FALSE, threshold = 0.5, non_zero_cut
 	#output = normalmixEM(log2(as.vector(non_zero_data)))  
 	output = normalmixEM(as.vector(non_zero_data))
 	#output$x = log2(output$x)
-	print( output$mu )
-	print( output$sigma )
+	#print( output$mu )
+	#print( output$sigma )
 	if (show.plot){
 		plot(output,which=2)
 	}
@@ -1455,8 +1455,8 @@ NormalMixture2_Detail <-function(data, show.plot = FALSE, threshold = 0.5, non_z
 	output2 = data
 	non_zero_data = data[which(data>non_zero_cut)]
 	output = normalmixEM(as.vector(non_zero_data))
-	print( output$mu )
-	print( output$sigma )
+	# print( output$mu )
+	# print( output$sigma )
 	if (show.plot){
 		plot(output,which=2)
 	}

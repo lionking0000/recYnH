@@ -67,14 +67,16 @@ def run( args ):
     if os.path.exists( temp_dir ) == False:
         os.makedirs( temp_dir )
 
-        
+    print "[ Normalizing matrix ]", args.matrix1, args.matrix2
     #cmd = "Rscript /usr/local/bin/visualization.R %s %s %s %s %s" % ( args.program, args.matrix1, args.matrix2, args.output, args.name )
     cmd = "Rscript ./src/visualization.R %s %s %s %s %s" % ( args.program, args.matrix1, args.matrix2, args.output, args.name )
     run_cmd( cmd )
 
-    #IS_output_path = "%s/%s.is.txt" % ( args.output, args.name )
-    NIS_output_path = "%s/%s.nis.txt" % ( args.output, args.name )
 
+    NIS_output_path = "%s/%s.nis.txt" % ( args.output, args.name )
+    print "[ Saving Interaction Score matrix ]", NIS_output_path
+    #IS_output_path = "%s/%s.is.txt" % ( args.output, args.name )
+    
     #if os.path.exists( IS_output_path ):
     #    m, rownames, colnames = read_R_generated_matrix( IS_output_path )
     #    save_matrix( IS_output_path, m, rownames, colnames )

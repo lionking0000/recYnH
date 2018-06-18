@@ -3,9 +3,10 @@ import os
 import threading
 import fasta
 
-VERBOSE = True # False
+VERBOSE = False # True
 
 NUM_THREADS = 1 #
+BLASTN_E_VALUE = "1e-8"
 
 def run_cmd( cmd ):
     if VERBOSE: print cmd
@@ -45,6 +46,7 @@ def GenerateLastNts( fasta_file, length = 150 ):
     return output_file
 
 def CheckBlastnDB( fasta_file, lastnt_length ):
+    print "[ Checking BlastN Database ]", fasta_file, lastnt_length
     bChecked = True
     if os.path.exists( fasta_file + ".-%d.nhr" % lastnt_length ) == False:
         bChecked = False
@@ -56,6 +58,7 @@ def CheckBlastnDB( fasta_file, lastnt_length ):
     return bChecked
 
 def MakeBlastnDB( fasta_file, lastnt_length ):
+    print "[ Making BlastN Database ]", fasta_file, lastnt_length
     command = "makeblastdb -in %s.-%d -dbtype nucl" % ( fasta_file, lastnt_length )
     run_cmd( command )
 
@@ -165,21 +168,12 @@ def align_subprocess( original_fasta, lastnt_length, fasta_file, fastq_file  ):
     FastqToFasta( fastq_file, fasta_file )
     
     # blastn-short search                                                                         (20) 
-    cmd = "blastn -num_threads %d -db %s.-%d  -query %s -task blastn-short -outfmt 6 -max_target_seqs 5 -evalue 1e-8 > %s.blastn" % ( NUM_THREADS, original_fasta, lastnt_length, fasta_file, fasta_file )
+    cmd = "blastn -num_threads %d -db %s.-%d  -query %s -task blastn-short -outfmt 6 -max_target_seqs 5 -evalue %s > %s.blastn" % ( NUM_THREADS, original_fasta, lastnt_length, fasta_file, BLASTN_E_VALUE, fasta_file )
     run_cmd( cmd )
    
 
 
 def run( args ):
-    #print args.program
-    #print args.fasta1
-    #print args.lastnt1
-    #print args.fasta2
-    #print args.lastnt2
-    #print args.fastq1
-    #print args.fastq2
-    #print args.output   
-
     if args.fasta2 == None:
         args.fasta2 = args.fasta1
 
@@ -234,7 +228,8 @@ def run( args ):
     #	             ***  ** **** ****************************************
     #
     #cmd = "cutadapt -g CGCTGCAGGTCGACGGATCTTAGTTACTTACCACTTTGTACAAGAAAGCTGGGT -G GCAGCTCGAGCTCGATGGATCTTAGTTACTTACCACTTTGTACAAGAAAGCTGGGT -o output/$1/$6/$2.fastq -p output/$1/$6/$3.fastq -m 15 --discard-untrimmed ./fastq/$2.fastq.gz ./fastq/$3.fastq.gz"
-    cmd = "cutadapt -g CGCTGCAGGTCGACGGATCTTAGTTACTTACCACTTTGTACAAGAAAGCTGGGT -G GCAGCTCGAGCTCGATGGATCTTAGTTACTTACCACTTTGTACAAGAAAGCTGGGT -o %s -p %s -m 15 --discard-untrimmed %s %s" % ( fq1, fq2, args.fastq1, args.fastq2 )
+    print "[ Removing adaptor sequences ]", fq1, fq2 
+    cmd = "cutadapt --quiet -g CGCTGCAGGTCGACGGATCTTAGTTACTTACCACTTTGTACAAGAAAGCTGGGT -G GCAGCTCGAGCTCGATGGATCTTAGTTACTTACCACTTTGTACAAGAAAGCTGGGT -o %s -p %s -m 15 --discard-untrimmed %s %s" % ( fq1, fq2, args.fastq1, args.fastq2 )
     run_cmd( cmd )
     
     '''
@@ -254,6 +249,7 @@ def run( args ):
     '''
 
     # multi-threading
+    print "[ Mapping sequences into reference baits and preys sequences ]", fq1, fq2 
     th1 = threading.Thread(target=align_subprocess, args = ( args.fasta1, args.lastnt1, fa1, fq1 ) )
     th1.start()
 
@@ -266,6 +262,7 @@ def run( args ):
     # python parse blastn output and make ppi map
     # currently stringent case, no restriction for position cases
     # maybe ignoring orientation could be added in the future
+    print "[ Making a pair matrix ]", os.path.join( args.output, args.name ) 
     if args.relaxed == True:
         # no restriction for aligned position
         cmd = "main.py BLASTN_RELAXED %s.-%d %s.blastn %s.blastn > %s/%s" % ( args.fasta1, args.lastnt1, fa1, fa2, args.output, args.name )
