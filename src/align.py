@@ -1,7 +1,6 @@
 #!/usr/bin/python
 import os
 import threading
-import library_checker
 import fasta
 
 VERBOSE = True # False

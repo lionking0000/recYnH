@@ -20,7 +20,34 @@ Table of Contents:
 	
 Summary
 -------
+[What is recYnH?]
+
 This program is taking recYnH sequencing files and generating recYnH interaction score matrix to correponding genes.
+
+We assumed that the sequencing format is the same as we described in [Nature Communication 2018 Paper].
+
+# After setting proper parameter in recYnH.py file
+# User can run the program as following command
+
+usage: recYnH.py [-h] COMMAND ...
+
+recYnH program
+
+positional arguments:
+  COMMAND     sub-command help
+    align     a help for align
+    score     a help for score
+    merge     a help for merge
+
+optional arguments:
+  -h, --help  show this help message and exit
+
+Commands:
+  align      Align the FASTQ sequencing files into bait and prey sequences to generate interaction matrix
+  score      Usging two interaction matries to generate an interaction score matrix
+  merge      Merge several interaction score matries and apply quartile correction to generate a final average interaction score matrix
+
+Run 'recYnH.py COMMAND --help' for more information on a command.
 
 Requirements
 ------------
