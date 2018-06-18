@@ -29,6 +29,22 @@ def FastqToFasta( fastq, fasta ):
     fout.close()
     f.close()
 
+def CheckBlastnDB( fasta_file ):
+    bChecked = True
+    if os.path.exists( fasta_file + ".nhr" ):
+        bChecked = False
+    if os.path.exists( fasta_file + ".nin" ):
+        bChecked = False
+    if os.path.exists( fasta_file + ".nsq" ):
+        bChecked = False
+
+    return bChecked
+
+def MakeBlastnDB( fasta_file ):
+    command = "makeblastdb -in %s -dbtype nucl" % fasta_file
+    run_cmd( command )
+
+
 def BLASTN_NEW( fasta_file, filepath1, filepath2, output_file ):
     print ( fasta_file, filepath1, filepath2, output_file )
     '''
@@ -148,6 +164,12 @@ def run( args ):
 
     if args.fasta2 == None:
         args.fasta2 = args.fasta1
+
+    # Blastn check
+    if CheckBlastnDB( args.fasta1 ) == False:
+        MakeBlastnDB( args.fasta1 )
+    if CheckBlastnDB( args.fasta2 ) == False:
+        MakeBlastnDB( args.fasta2 )
 
     [ dirname1, fq1 ] = os.path.split( args.fastq1 )
     [ dirname2, fq2 ] = os.path.split( args.fastq2 )

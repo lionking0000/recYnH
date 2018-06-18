@@ -10,14 +10,9 @@ Table of Contents:
 - [Usage](#usage)
 	- [Help](#help)
 	- [Quick Usage](#quick-usage)
-	- [Alignment](#alignment)
-	- [Merging Outputs](#merging-outputs)
-	- [Strand-specific RNAseq data](#strand-specific-rnaseq-data)
-	- [Combining Results](#combining-results)
-	- [Comparing PSIs Between Samples](#comparing-psis-between-samples)
-	- [Differential Splicing Analysis](#differential-splicing-analysis)
-	- [Plotting](#plotting)
-	- [Simplifying Combine Table](#simplifying-combine-table)
+	- [Alignment](#align)
+	- [Interaction Score](#score)
+	- [Merge Interaction Scores](#merge)
 - [Issues](#issues)
 - [Contributions](#contributions)
 - [Citation](#citation)
@@ -125,6 +120,6 @@ n: output name
 
 Example 1
 ~~~~
-python recYnH.py merge -i ./example/output/EXP1 ./example/output/EXP2 -o ./example/output/ -n EXP.avgIS
+python recYnH.py merge -i ./example/output/EXP1.nis.txt ./example/output/EXP2.nis.txt -o ./example/output/ -n EXP.avgIS
 ~~~~
 
