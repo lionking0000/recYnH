@@ -26,10 +26,13 @@ This program is taking recYnH sequencing files and generating recYnH interaction
 
 We assumed that the sequencing format is the same as we described in [Nature Communication 2018 Paper].
 
-# After setting proper parameter in recYnH.py file
-# User can run the program as following command
+ After setting proper parameter in recYnH.py file
 
+ User can run the program as following command
+
+~~~~
 usage: recYnH.py [-h] COMMAND ...
+~~~~
 
 recYnH program
 
