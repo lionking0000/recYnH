@@ -40,6 +40,8 @@ python recYnH.py merge -i ./example/output/EXP1.5k.nis.txt ./example/output/EXP2
 
 
 
+ 
+
 
 # Y3H examples
 # Run EXP1 with 25k reads
