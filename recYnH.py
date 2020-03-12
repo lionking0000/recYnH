@@ -25,9 +25,9 @@ if __name__ == "__main__":
     align_parser = subparsers.add_parser('align', help='a help for align')
     align_parser.add_argument('-p', '--program', default='Y2H', help="set the experiments type ('Y2H'|'Y3H') (default 'Y2H')" ) # Y2H or Y3H
     align_parser.add_argument('-r', '--relaxed', action='store_true', help="set relaxed alignment mode" ) # Y2H or Y3H
-    align_parser.add_argument('-i1', '--fasta1', required=True, help="set the sequence of baits and preys; if i2 is set then it is for baits" ) # Y2H or Y3H
-    align_parser.add_argument('-i2', '--fasta2', required=False, help="set the sequence of preys (OPTIONAL)" ) # Y2H or Y3H
-    align_parser.add_argument('-l1', '--lastnt1', default=150, type=int, required=False, help="set the sequence of length of baits (default 150nt)" ) # Y2H or Y3H
+    align_parser.add_argument('-i1', '--fasta1', required=True, help="set the sequence of baits and preys; if i2 is set then it is for baits; RNA baits in Y3H" ) # Y2H or Y3H
+    align_parser.add_argument('-i2', '--fasta2', required=False, help="set the sequence of preys (OPTIONAL in Y2H; protein preys in Y3H)" ) # Y2H or Y3H
+    align_parser.add_argument('-l1', '--lastnt1', default=150, type=int, required=False, help="set the sequence of length of baits (default 150nt); In Y3H, it is not used" ) # Y2H or Y3H
     align_parser.add_argument('-l2', '--lastnt2', default=150, type=int, required=False, help="set the sequence of length of preys (default 150nt)" ) # Y2H or Y3H
     align_parser.add_argument('-f1', '--fastq1', required=True, help="set the FASTQ file (read 1 = baits)" ) # Y2H or Y3H
     align_parser.add_argument('-f2', '--fastq2', required=True, help="set the FASTQ file (read 2 = preys)" ) # Y2H or Y3H

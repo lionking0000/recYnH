@@ -36,3 +36,14 @@ python recYnH.py score -m1 ./example/output/EXP3_W.5k -m2 ./example/output/EXP3_
 # Merge 5k reads
 python recYnH.py merge -i ./example/output/EXP1.5k.nis.txt ./example/output/EXP2.5k.nis.txt ./example/output/EXP3.5k.nis.txt -o ./example/output/ -n EXP.5k.avgIS
 
+
+
+
+
+
+# Y3H examples
+# Run EXP1 with 25k reads
+# output/2017-08-24_MiSeq/Blastn/S1_W_R1.exact
+python recYnH.py align -p Y3H -i1 ./example/db/roth2016_control_set_plus_control.fa -f1 ./example/fastq/EXP1_W_R1.25000.fastq -f2 ./example/fastq/EXP1_W_R2.25000.fastq -o ./example/output_RNA/ -n EXP1_W.25k
+python recYnH.py align -p Y3H -i1 ./example/db/roth2016_control_set_plus_control.fa -f1 ./example/fastq/EXP1_Q_R1.25000.fastq -f2 ./example/fastq/EXP1_Q_R2.25000.fastq -o ./example/output_RNA/ -n EXP1_Q.25k
+python recYnH.py score -p Y3H -m1 ./example/output/EXP1_W.25k -m2 ./example/output/EXP1_Q.25k -o ./example/output_RNA/ -n EXP1.25k
