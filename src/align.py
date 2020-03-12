@@ -302,7 +302,7 @@ def ReverseComplement(seq):
 
 
 def align_RNA_subprocess( original_fasta, lastnt_length, fasta_file, fastq_file  ):    
-    RNAMapping( fastq_file, original_fasta, "%s.exact" % fastq_file )
+    RNAMapping( fastq_file, original_fasta, "%s.exact" % fasta_file )
 
     # blastn-short search                                                                         (20) 
     #cmd = "blastn -num_threads %d -db %s.-%d  -query %s -task blastn-short -outfmt 6 -max_target_seqs 5 -evalue %s > %s.blastn" % ( NUM_THREADS, original_fasta, lastnt_length, fasta_file, BLASTN_E_VALUE, fasta_file )
@@ -413,7 +413,6 @@ def RNAMapping( fastq_file, fasta_file, output_file ):
         rc_seq = ReverseComplement( seq )
         motif = prefix + rc_seq[:50]   # using only 50 nt for all cases (This can be chaged) 
         motifs[ motif ] = id
-        
     
     #===============================
     # Read Fastq file (RNA, Read1) and Searching id with exact matching the pattern (motif)
@@ -497,12 +496,11 @@ def run_Y3H( args ):
     print "[ Removing adaptor sequences ]", fq1, fq2 
     #cmd = "cutadapt --quiet -g CGCTGCAGGTCGACGGATCTTAGTTACTTACCACTTTGTACAAGAAAGCTGGGT -G GCAGCTCGAGCTCGATGGATCTTAGTTACTTACCACTTTGTACAAGAAAGCTGGGT -o %s -p %s -m 15 --discard-untrimmed %s %s" % ( fq1, fq2, args.fastq1, args.fastq2 )
     cmd = "cutadapt --quiet -g GCAGGCATGCAAGCTGCC -G GCAGCTCGAGCTCGATGGATCTTAGTTACTTACCACTTTGTACAAGAAAGCTGGGT -o %s -p %s -m 15 --discard-untrimmed %s %s" % ( fq1, fq2, args.fastq1, args.fastq2 )
-    print cmd
     run_cmd( cmd )
     
     # multi-threading
     print "[ Mapping sequences into reference baits and preys sequences ]", fq1, fq2 
-    th1 = threading.Thread(target=align_RNA_subprocess, args = ( args.fasta1, args.lastnt1, fa1, fq1 ) )
+    th1 = threading.Thread(target=align_RNA_subprocess, args = ( args.fasta1, args.lastnt1, fa1, args.fastq1 ) )
     th1.start()
 
     th2 = threading.Thread(target=align_subprocess, args = ( args.fasta2, args.lastnt2, fa2, fq2 ) )
@@ -516,13 +514,11 @@ def run_Y3H( args ):
     # maybe ignoring orientation could be added in the future
     print "[ Making a pair matrix ]", os.path.join( args.output, args.name ) 
 
-    #cmd = "python main.py BLASTN ../data/1st_set.-100.fa output/2017-08-24_MiSeq/Blastn/S1_W_R1.exact output/2017-08-24_MiSeq/Blastn/S1_W_R2.blastn > output/2017-08-24_MiSeq/Blastn/S1_W.exact.rpi.txt"
-    #cmd = "python main.py BLASTN ../data/1st_set.-100.fa output/2017-08-24_MiSeq/Blastn/S1_W_R1.exact output/2017-08-24_MiSeq/Blastn/S1_W_R2.blastn > output/2017-08-24_MiSeq/Blastn/S1_W.exact.rpi.txt"
     
-    exact_file1 = "%s.exact" % fq1
+    exact_file1 = "%s.exact" % fa1
     blastn_file2 = "%s.blastn" % fa2
     
-    output_file = "%s.exact.rpi.txt" % args.name
+    output_file = os.path.join( args.output, args.name ) # "%s/%s.exact.rpi.txt" % ( args.output, args.name )
     BLASTN_RNA( args.fasta1, args.fasta2, exact_file1, blastn_file2, output_file )
 
     #print cmd
