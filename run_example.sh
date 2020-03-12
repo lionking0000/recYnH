@@ -45,7 +45,8 @@ python recYnH.py merge -i ./example/output/EXP1.5k.nis.txt ./example/output/EXP2
 
 # Y3H examples
 # Run EXP1 with 25k reads
-python recYnH.py align -p Y3H -i1 ./example/db/2nd_RNA_set.fa -i2 ./example/db/2nd_PROTEIN_set.fa -f1 ./example/fastq/2019-01-04_MiSeq/WD_S1_R1.fastq -f2 ./example/fastq/2019-01-04_MiSeq/WD_S1_R2.fastq -o ./example/output_RNA/ -n EXP1_W.25k 
-python recYnH.py align -p Y3H -i1 ./example/db/2nd_RNA_set.fa -i2 ./example/db/2nd_PROTEIN_set.fa -f1 ./example/fastq/2019-01-04_MiSeq/WHD_S2_R1.fastq -f2 ./example/fastq/2019-01-04_MiSeq/WHD_S2_R2.fastq -o ./example/output_RNA/ -n EXP1_WHD.25k 
+python recYnH.py align -p Y3H -i1 ./example/db/2nd_RNA_set.fa -i2 ./example/db/2nd_PROTEIN_set.fa -f1 ./example/fastq/RNA/WD_S1_R1.fastq -f2 ./example/fastq/RNA/WD_S1_R2.fastq -o ./example/output_RNA/ -n EXP1_W.25k 
+python recYnH.py align -p Y3H -i1 ./example/db/2nd_RNA_set.fa -i2 ./example/db/2nd_PROTEIN_set.fa -f1 ./example/fastq/RNA/WHD_S2_R1.fastq -f2 ./example/fastq/RNA/WHD_S2_R2.fastq -o ./example/output_RNA/ -n EXP1_WHD.25k 
 python recYnH.py score -p Y3H -m1 ./example/output_RNA/EXP1_W.25k -m2 ./example/output_RNA/EXP1_WHD.25k -o ./example/output_RNA/ -n EXP1.25k
+
 

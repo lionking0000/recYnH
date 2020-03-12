@@ -385,8 +385,6 @@ def BLASTN_RNA( fasta1, fasta2, exact_file1, blastn_file2, output_file ):
             output += "\t%d" % cnt
         print >> fo, output
 
-    print >> fo, total_cnt # only for debug
-
     fo.close()
 
 
